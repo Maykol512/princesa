@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Para Ti ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;500&display=swap');
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* --- PANTALLA INICIAL --- */
+        #pantalla-inicio {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease-out;
+        }
+
+        /* Estilo del Corazón */
+        .corazon-btn {
+            position: relative;
+            width: 100px;
+            height: 90px;
+            animation: latido 1.2s infinite;
+            cursor: pointer;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 80, 0.8));
+        }
+        .corazon-btn::before, .corazon-btn::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 60px;
+            height: 100px;
+            border-radius: 50px 50px 0 0;
+            background: linear-gradient(to bottom, #ff0055, #ff4d6d);
+        }
+        .corazon-btn::before { left: 50px; transform: rotate(-45deg); transform-origin: 0 100%; }
+        .corazon-btn::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
+
+        @keyframes latido {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        #contenedor-visual {
+            width: 100%;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            padding-bottom: 50px;
+            z-index: 10;
+        }
+
+        /* FOTOS SECUENCIA */
+        .foto-secuencia {
+            display: none;
+            width: 85vw;
+            max-width: 350px;
+            height: auto;
+            margin: 0 auto 20px auto;
+            border-radius: 12px;
+            border: 2px solid #ff4d6d;
+            box-shadow: 0 0 15px rgba(255, 77, 109, 0.5);
+            animation: entradaSuave 1s ease forwards;
+        }
+
+        @keyframes entradaSuave {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARRUSEL */
+        #carrusel-container {
+            width: 90vw;
+            max-width: 350px;
+            height: 400px;
+            margin: 20px auto;
+            position: relative;
+            display: none;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid #ff4d6d;
+            box-shadow: 0 0 25px rgba(255, 0, 80, 0.6);
+        }
+        
+        #carrusel-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+        #carrusel-container img.activa { opacity: 1; }
+
+        /* --- PREGUNTA SAN VALENTIN --- */
+        #pregunta-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 400px;
+            animation: fadeIn 1s ease;
+        }
+
+        .pregunta-titulo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #ffccd5;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 0, 80, 0.8);
+        }
+
+        .botones-box {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn-opcion {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: 2px solid #ff4d6d;
+            background: transparent;
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-opcion:active { transform: scale(0.95); }
+        .btn-si { background: rgba(255, 0, 80, 0.2); box-shadow: 0 0 15px rgba(255, 0, 80, 0.4); }
+        .btn-no { background: rgba(255, 255, 255, 0.1); border-color: #ccc; }
+
+        /* --- CAJA DE TEXTO (CARTA) --- */
+        #carta-texto-box {
+            display: none;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 380px;
+            background: rgba(20, 0, 5, 0.95);
+            border: 2px solid #ff0055;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.4);
+            min-height: 150px;
+        }
+
+        #texto-escribiendo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.6rem;
+            color: #ffccd5;
+            line-height: 1.5;
+            text-align: left;
+            white-space: pre-wrap;
+        }
+
+        /* --- BOTÓN FINAL / MENSAJE PERDIDA --- */
+        #btn-redirect-container {
+            margin-top: 30px;
+            margin-bottom: 50px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            animation: fadeIn 2s ease;
+        }
+
+        #mensaje-perdido {
+            display: none;
+            margin-top: 30px;
+            margin-bottom: 50px;
+            font-size: 1.5rem;
+            color: #aaa;
+            font-weight: bold;
+            animation: fadeIn 2s ease;
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Lluvia */
+        .emoji-rain {
+            position: fixed;
+            top: -50px;
+            font-size: 24px;
+            animation: caer linear forwards;
+            z-index: 1;
+            opacity: 0.6;
+            color: #ff4d6d;
+        }
+        @keyframes caer { to { transform: translateY(110vh); } }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-inicio">
+        <div class="corazon-btn" onclick="iniciarSorpresa()"></div>
+        <div style="position: absolute; bottom: 20%; color: #aaa; font-size: 0.8rem;">Tócame</div>
+    </div>
+
+    <div id="contenedor-visual">
+        <img src="1.JPEG" id="foto1" class="foto-secuencia">
+        <img src="2.JPEG" id="foto2" class="foto-secuencia">
+        <img src="3.JPEG" id="foto3" class="foto-secuencia">
+
+        <div id="carrusel-container">
+            <img src="1.JPEG" class="activa">
+            <img src="2.JPEG">
+            <img src="3.JPEG">
+        </div>
+
+        <div id="pregunta-container">
+            <div class="pregunta-titulo">¿Quieres ser mi San Valentín?</div>
+            <div class="botones-box">
+                <button class="btn-opcion btn-si" onclick="elegirOpcion('si')">Sí 😍</button>
+                <button class="btn-opcion btn-no" onclick="elegirOpcion('no')">No 😐</button>
+            </div>
+        </div>
+
+        <div id="carta-texto-box">
+            <div id="texto-escribiendo"></div>
+        </div>
+
+        <div id="btn-redirect-container">
+            <div class="corazon-btn" style="transform: scale(0.8);" onclick="irARoot12()"></div>
+            <p style="color: #ff4d6d; margin-top: 10px; font-weight: bold;">Continuar</p>
+        </div>
+
+        <div id="mensaje-perdido">
+            Te lo perdiste :P
+        </div>
+    </div>
+
+    <audio id="audio1" src="1.mpeg" preload="auto"></audio>
+    <audio id="audio2" src="2.mpeg" preload="auto"></audio>
+    <audio id="audioTriste" src="5.mpeg" preload="auto"></audio> <script>
+        // --- TEXTOS ---
+        
+        // RUTA SÍ
+        const textoSi_1 = "Oye le diste que si!!!! mi princesa hermosa jsjsjs:3";
+        const textoSi_2 = "Mi amor..., Tu sabes muy bien que te quiero mucho mucho muchote, gracias por ser mi san valentin >_<.";
+        const textoSi_Final = "Mi princesa\n\nGracias por iluminar mis días. Cada recuerdo contigo es un tesoro.\ny María, mi princesa, aunque hoy nos separen kilómetros, me encanta lo que estamos construyendo.\n\nMe gusta cómo, incluso a la distancia, logras hacerme sonreír y sentirte cerca con cada mensaje y cada llamada. No es fácil, pero vale la pena, porque lo que siento por ti es real y sincero.\n\nSueño con el día en que pueda abrazarte sin despedidas, pero mientras tanto, mi corazón camina contigo todos los días. ❤️\n\nTe amo inmensamente.";
+
+        // RUTA NO
+        const textoNo_1 = ":( bueno solo no importa igualmente queria decirte esto muak!!!!!!!!!!!..............";
+        const textoNo_Final = "Me gusta muchote :/, incluso a la distancia, logras hacerme sonreír y sentirte cerca con cada mensaje y cada llamada. No es fácil, pero vale la pena, porque lo que siento por ti es real y sincero.\n\nSueño con el día en que pueda abrazarte sin despedidas, pero mientras tanto, mi corazón camina contigo todos los días. ❤️";
+
+
+        function iniciarSorpresa() {
+            document.getElementById('audio1').play();
+            iniciarLluviaCentrada();
+
+            const inicio = document.getElementById('pantalla-inicio');
+            inicio.style.opacity = '0';
+            setTimeout(() => {
+                inicio.style.display = 'none';
+                document.getElementById('contenedor-visual').style.display = 'flex';
+                ejecutarSecuencia();
+            }, 1000);
+        }
+
+        function ejecutarSecuencia() {
+            // 15 Segundos de espera inicial
+            setTimeout(() => {
+                mostrarFoto('foto1');
+                setTimeout(() => {
+                    mostrarFoto('foto2');
+                    setTimeout(() => {
+                        mostrarFoto('foto3');
+                        setTimeout(() => {
+                            cambiarACarrusel();
+                        }, 3000);
+                    }, 6000);
+                }, 5000);
+            }, 15000);
+        }
+
+        function mostrarFoto(id) {
+            const img = document.getElementById(id);
+            img.style.display = 'block';
+            img.scrollIntoView({behavior: "smooth", block: "center"});
+        }
+
+        function cambiarACarrusel() {
+            document.getElementById('foto1').style.display = 'none';
+            document.getElementById('foto2').style.display = 'none';
+            document.getElementById('foto3').style.display = 'none';
+
+            const carrusel = document.getElementById('carrusel-container');
+            carrusel.style.display = 'block';
+            carrusel.scrollIntoView({behavior: "smooth", block: "center"});
+
+            let idx = 0;
+            const slides = carrusel.querySelectorAll('img');
+            setInterval(() => {
+                slides[idx].classList.remove('activa');
+                idx = (idx + 1) % slides.length;
+                slides[idx].classList.add('activa');
+            }, 3000);
+
+            // 5 SEGUNDOS después -> MOSTRAR PREGUNTA
+            setTimeout(() => {
+                const pregunta = document.getElementById('pregunta-container');
+                pregunta.style.display = 'flex';
+                pregunta.scrollIntoView({behavior: "smooth", block: "center"});
+            }, 5000);
+        }
+
+        // --- LÓGICA DE BOTONES SÍ / NO ---
+        function elegirOpcion(opcion) {
+            if (opcion === 'no') {
+                alert("¿Estás segura? 🥺 Tengo una sorpresa interesante...");
+                alert("¡Di que sí! No te vas a arrepentir...");
+                alert("Última oportunidad... ¿Segura que quieres ver el mensaje triste?");
+                ejecutarRutaTriste();
+            } else {
+                ejecutarRutaFeliz();
+            }
+        }
+
+        function cambiarMusicaYMostrarCaja(esTriste) {
+            // Detener audio inicial
+            document.getElementById('audio1').pause();
+
+            if (esTriste) {
+                // Play audio triste (5.mpeg)
+                document.getElementById('audioTriste').play();
+            } else {
+                // Play audio romántico (2.mpeg)
+                document.getElementById('audio2').play();
+            }
+            
+            // Ocultar preguntas y mostrar caja de texto
+            document.getElementById('pregunta-container').style.display = 'none';
+            const caja = document.getElementById('carta-texto-box');
+            caja.style.display = 'block';
+            caja.scrollIntoView({behavior: "smooth", block: "center"});
+        }
+
+        // --- RUTAS DE ESCRITURA CON 7 SEGUNDOS DE ESPERA ---
+        
+        function ejecutarRutaFeliz() {
+            cambiarMusicaYMostrarCaja(false); // Música romántica
+
+            // 1. Escribir primer mensaje
+            escribirTexto(textoSi_1, () => {
+                // ESPERA DE 7 SEGUNDOS PARA LEER
+                setTimeout(() => {
+                    borrarTexto(() => {
+                        // 2. Escribir segundo mensaje
+                        escribirTexto(textoSi_2, () => {
+                            // ESPERA DE 7 SEGUNDOS PARA LEER
+                            setTimeout(() => {
+                                borrarTexto(() => {
+                                    // 3. CARTA FINAL
+                                    escribirTexto(textoSi_Final, () => {
+                                        setTimeout(() => {
+                                            const btnRedirect = document.getElementById('btn-redirect-container');
+                                            btnRedirect.style.display = 'flex';
+                                            btnRedirect.scrollIntoView({behavior: "smooth", block: "center"});
+                                        }, 2000);
+                                    });
+                                });
+                            }, 7000); 
+                        });
+                    });
+                }, 7000); 
+            });
+        }
+
+        function ejecutarRutaTriste() {
+            cambiarMusicaYMostrarCaja(true); // Música triste (5.mpeg)
+
+            // 1. Escribir mensaje triste 1
+            escribirTexto(textoNo_1, () => {
+                // ESPERA DE 7 SEGUNDOS PARA LEER
+                setTimeout(() => {
+                    borrarTexto(() => {
+                        // 2. Mensaje final triste
+                        escribirTexto(textoNo_Final, () => {
+                            setTimeout(() => {
+                                const msgPerdido = document.getElementById('mensaje-perdido');
+                                msgPerdido.style.display = 'block';
+                                msgPerdido.scrollIntoView({behavior: "smooth", block: "center"});
+                            }, 2000);
+                        });
+                    });
+                }, 7000);
+            });
+        }
+
+        // --- FUNCIONES DE MÁQUINA DE ESCRIBIR ---
+
+        function escribirTexto(texto, callback) {
+            const destino = document.getElementById('texto-escribiendo');
+            let i = 0;
+            const velocidad = 50; 
+
+            function tipo() {
+                if (i < texto.length) {
+                    let char = texto.charAt(i);
+                    if (char === '\n') {
+                        destino.innerHTML += '<br>';
+                    } else {
+                        destino.innerHTML += char;
+                    }
+                    i++;
+                    setTimeout(tipo, velocidad);
+                } else {
+                    if (callback) callback();
+                }
+            }
+            tipo();
+        }
+
+        function borrarTexto(callback) {
+            const destino = document.getElementById('texto-escribiendo');
+            const velocidadBorrado = 30;
+
+            function backspace() {
+                let actual = destino.innerText;
+                if (actual.length > 0) {
+                    destino.innerText = actual.slice(0, -1);
+                    setTimeout(backspace, velocidadBorrado);
+                } else {
+                    destino.innerHTML = ""; 
+                    if (callback) callback();
+                }
+            }
+            backspace();
+        }
+
+        function irARoot12() {
+            window.location.href = 'root12.HTML';
+        }
+
+        function iniciarLluviaCentrada() {
+            const emojis = ['❤️', '😍', '✨', 'Love', '💕'];
+            setInterval(() => {
+                const el = document.createElement('div');
+                el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                el.className = 'emoji-rain';
+                el.style.left = (Math.random() * 80 + 10) + 'vw'; 
+                el.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                el.style.fontSize = (Math.random() * 10 + 20) + 'px';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 5000);
+            }, 350);
+        }
+    </script>
+</body>
+</html>
