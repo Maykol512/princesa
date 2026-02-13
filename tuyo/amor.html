@@ -137,15 +137,16 @@
 
         .flowers { position: relative; transform: scale(0.9); }
         
+        /* AJUSTES ESPECÍFICOS PARA MÓVIL */
         @media only screen and (max-width: 600px) { 
             .romantic-title { font-size: 2rem; }
             .flowers { 
                 font-size: 14px; 
-                margin-bottom: 20%; 
+                margin-bottom: 45%; /* Sube un poco las flores para que no las tape el borde inferior */
                 letter-spacing: 3px; 
-                transform: scale(1.15); 
+                transform: scale(1.8); /* AQUÍ SE AGRANDAN LAS FLORES PARA MÓVIL */
             } 
-            #sparks-lyrics { font-size: 22px; top: 18%; } 
+            #sparks-lyrics { font-size: 22px; top: 15%; } 
             .love-phrase { font-size: 14px !important; padding: 4px 8px; }
             .flower__leafs::after { filter: blur(5vmin) !important; } 
         }
@@ -507,7 +508,6 @@
                 const randomPhrase = lovePhrases[Math.floor(Math.random() * lovePhrases.length)];
                 phraseElement.textContent = randomPhrase;
                 
-                // CENTRADO: Entre 10% y 90% (aprox 8vw a 92vw)
                 phraseElement.style.left = Math.random() * 84 + 8 + "vw"; 
                 
                 phraseElement.style.color = colors[Math.floor(Math.random() * colors.length)];
@@ -517,7 +517,7 @@
                 phraseElement.style.animation = "fall " + fallDuration + "s linear";
                 container.appendChild(phraseElement);
                 setTimeout(function() { if (phraseElement.parentNode === container) { container.removeChild(phraseElement); } }, fallDuration * 1000);
-            }, 400); // MÁS INTENSO: 400ms (antes 800ms)
+            }, 400); 
         }
 
         function createImageRain() {
@@ -534,7 +534,6 @@
                 
                 img.src = imgNum + ".jpg"; 
                 
-                // CENTRADO: Entre 10% y 90% (aprox 8vw a 92vw)
                 img.style.left = Math.random() * 84 + 8 + "vw";
                 
                 const width = 30 + Math.random() * 40; 
@@ -546,7 +545,7 @@
                 container.appendChild(img);
                 
                 setTimeout(() => { img.remove(); }, duration * 1000);
-            }, 600); // MÁS INTENSO: 600ms (antes 1200ms)
+            }, 600); 
         }
     </script>
 </body>
